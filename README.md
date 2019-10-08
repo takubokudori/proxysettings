@@ -1,4 +1,4 @@
-# proxy
+# proxysettings
 Export proxy settings to environment variables.
 - http_proxy
 - HTTP_PROXY
@@ -7,6 +7,7 @@ Export proxy settings to environment variables.
 - ftp_proxy
 - FTP_PROXY
 
+![proxysettings](https://raw.githubusercontent.com/takubokudori/proxysettings/master/screenshots/pic1.PNG)
 ## Usage
 
 ```
