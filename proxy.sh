@@ -1,3 +1,4 @@
+#!/bin/bash
 SETTINGS_FILEPATH=~/.proxysettings
 
 apply_settings()
