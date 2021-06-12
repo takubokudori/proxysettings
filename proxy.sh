@@ -1,8 +1,38 @@
 #!/bin/bash
 SETTINGS_FILEPATH=~/.proxysettings
 
-apply_settings()
-{
+ord(){
+    printf "%d" \'$1
+}
+ord16(){
+    printf "%x" \'$1
+}
+
+url_encode(){
+    a=$(ord 'a')
+    z=$(ord 'z')
+    A=$(ord 'A')
+    Z=$(ord 'Z')
+    x0=$(ord '0')
+    x9=$(ord '9')
+    ret=""
+    for i in $(echo $1|fold -s1)
+    do
+        v=$(ord $i)
+        if test $a -le $v -a $v -le $z \
+            -o $A -le $v -a $v -le $Z \
+            -o $x0 -le $v -a $v -le $x9 \
+            ; then
+                    ret+=$i
+                else
+                    v=$(ord16 $i)
+                    ret+="%$v"
+        fi
+    done
+    echo $ret
+}
+
+apply_settings(){
 	if [ -z $username ]; then
 		url="http://${host}:${port}"
 	else 
@@ -16,10 +46,6 @@ apply_settings()
 	export HTTPS_PROXY="$url"
 	export ftp_proxy="$url"
 	export FTP_PROXY="$url"
-}
-
-url_encode(){
-	echo "$1" | nkf -WwMQ | sed 's/=$//g' | tr = % | tr -d '\n'
 }
 
 save_settings()
@@ -38,12 +64,8 @@ load_settings()
 
 ask_password()
 {
-	if type "nkf" > /dev/null 2>&1; then
-		read -sp "Password: " password
-		password=`url_encode $password`
-	else
-		read -sp "(URL encoded)Password: " password
-	fi
+    read -sp "Password: " password
+    password=`url_encode $password`
 	echo $password
 }
 
